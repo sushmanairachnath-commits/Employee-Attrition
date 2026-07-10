@@ -1,0 +1,1499 @@
+{
+  "datasets": [
+    {
+      "name": "1fceeb76",
+      "displayName": "by BusinessTravel",
+      "queryLines": [
+        "SELECT \n",
+        "  BusinessTravel, \n",
+        "  COUNT(*) as Total, \n",
+        "  SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) as ChurnCount,\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) as SegmentChurnRate,\n",
+        "  SUM(CASE WHEN Attrition = 'No' THEN 1 ELSE 0 END) as RetainCount,\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'No' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) as RetainRate\n",
+        "FROM hr_employee_attrition\n",
+        "GROUP BY BusinessTravel\n",
+        "\n",
+        "\n"
+      ]
+    },
+    {
+      "name": "b23ebd4a",
+      "displayName": "by Department",
+      "queryLines": [
+        "SELECT \r\n",
+        "  Department, \r\n",
+        "  COUNT(*) as Total, \r\n",
+        "  SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) as ChurnCount,\r\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) as SegmentChurnRate,\r\n",
+        "  SUM(CASE WHEN Attrition = 'No' THEN 1 ELSE 0 END) as RetainCount,\r\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'No' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) as RetainRate\r\n",
+        "FROM hr_employee_attrition\r\n",
+        "GROUP BY Department"
+      ]
+    },
+    {
+      "name": "5c824982",
+      "displayName": "by Distance from home",
+      "queryLines": [
+        "SELECT\r\n",
+        "  CASE\r\n",
+        "    WHEN DistanceFromHome >= 0 AND DistanceFromHome < 10 THEN '0-10'\r\n",
+        "    WHEN DistanceFromHome >= 10 AND DistanceFromHome < 20 THEN '10-20'\r\n",
+        "    WHEN DistanceFromHome >= 20 AND DistanceFromHome <= 30 THEN '20-30'\r\n",
+        "  END AS distance_group,\r\n",
+        "  COUNT(*) as num_employees\r\n",
+        "FROM `hr_employee_attrition`\r\n",
+        "WHERE attrition = 'Yes'\r\n",
+        "  AND DistanceFromHome >= 0\r\n",
+        "  AND DistanceFromHome <= 30\r\n",
+        "GROUP BY distance_group\r\n",
+        "ORDER BY num_employees DESC"
+      ]
+    },
+    {
+      "name": "f0f1acb9",
+      "displayName": "Education by YearsinCurRole",
+      "queryLines": [
+        "SELECT \r\n",
+        "  Education, \r\n",
+        "  CASE\r\n",
+        "    WHEN YearsInCurrentRole >= 0 AND YearsInCurrentRole < 5 THEN '0-5'\r\n",
+        "    WHEN YearsInCurrentRole >= 5 AND YearsInCurrentRole < 10 THEN '5-10'\r\n",
+        "    WHEN YearsInCurrentRole >= 10 AND YearsInCurrentRole < 15 THEN '10-15'\r\n",
+        "    WHEN YearsInCurrentRole >= 15 AND YearsInCurrentRole < 20 THEN '15-20'\r\n",
+        "    ELSE '20+'\r\n",
+        "  END AS YearsInCurrentRole_Group,\r\n",
+        "  COUNT(*) as Total,\r\n",
+        "  SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) as ChurnCount,\r\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) as AttritionRate\r\n",
+        "FROM hr_employee_attrition\r\n",
+        "GROUP BY Education, YearsInCurrentRole_Group\r\n",
+        "ORDER BY Education, YearsInCurrentRole_Group"
+      ]
+    },
+    {
+      "name": "93c4d7c5",
+      "displayName": "income by salaryhike",
+      "queryLines": [
+        "SELECT\r\n",
+        "  CASE\r\n",
+        "    WHEN MonthlyIncome >= 0 AND MonthlyIncome < 5000 THEN '0-5000'\r\n",
+        "    WHEN MonthlyIncome >= 5000 AND MonthlyIncome < 10000 THEN '5000-10000'\r\n",
+        "    WHEN MonthlyIncome >= 10000 AND MonthlyIncome < 15000 THEN '10000-15000'\r\n",
+        "    WHEN MonthlyIncome >= 15000 AND MonthlyIncome < 20000 THEN '15000-20000'\r\n",
+        "    ELSE '20000+'\r\n",
+        "  END AS income_group,\r\n",
+        "  CASE\r\n",
+        "    WHEN PercentSalaryHike >= 11 AND PercentSalaryHike <= 15 THEN '11-15'\r\n",
+        "    WHEN PercentSalaryHike >= 16 AND PercentSalaryHike <= 20 THEN '16-20'\r\n",
+        "    WHEN PercentSalaryHike >= 21 AND PercentSalaryHike <= 25 THEN '21-25'\r\n",
+        "    ELSE 'Other'\r\n",
+        "  END AS salary_hike_group,\r\n",
+        "  COUNT(*) AS Total,\r\n",
+        "  SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) AS ChurnCount,\r\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS AttritionRate,\r\n",
+        "  SUM(CASE WHEN Attrition = 'No' THEN 1 ELSE 0 END) AS RetainCount,\r\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'No' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS RetainRate\r\n",
+        "FROM hr_employee_attrition\r\n",
+        "GROUP BY income_group, salary_hike_group\r\n",
+        "ORDER BY income_group, salary_hike_group"
+      ]
+    },
+    {
+      "name": "c20f6d47",
+      "displayName": "overall",
+      "queryLines": [
+        "SELECT\r\n",
+        "  'ChurnRate' AS RateType,\r\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'Yes' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS RateValue\r\n",
+        "FROM hr_employee_attrition\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "  'RetainRate' AS RateType,\r\n",
+        "  ROUND((SUM(CASE WHEN Attrition = 'No' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS RateValue\r\n",
+        "FROM hr_employee_attrition"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "85b66982",
+      "displayName": "Employee_Attrition",
+      "layout": [
+        {
+          "widget": {
+            "name": "173ea3f0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1fceeb76",
+                  "fields": [
+                    {
+                      "name": "BusinessTravel",
+                      "expression": "`BusinessTravel`"
+                    },
+                    {
+                      "name": "SegmentChurnRate",
+                      "expression": "`SegmentChurnRate`"
+                    },
+                    {
+                      "name": "RetainRate",
+                      "expression": "`RetainRate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "BusinessTravel",
+                  "axis": {
+                    "labelAngle": 0
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "SegmentChurnRate",
+                      "displayName": "Churned"
+                    },
+                    {
+                      "fieldName": "RetainRate",
+                      "displayName": "Retained"
+                    }
+                  ],
+                  "axis": {
+                    "title": "Employee Percentage",
+                    "hideLabels": true
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Churn and Retain Rates corresponding to travel frequency for business",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#D93827",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ],
+                "layout": "percent-stack"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "2553eaad",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b23ebd4a",
+                  "fields": [
+                    {
+                      "name": "Department",
+                      "expression": "`Department`"
+                    },
+                    {
+                      "name": "SegmentChurnRate",
+                      "expression": "`SegmentChurnRate`"
+                    },
+                    {
+                      "name": "RetainRate",
+                      "expression": "`RetainRate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Department",
+                  "axis": {
+                    "labelAngle": 0
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "SegmentChurnRate",
+                      "displayName": "Attrition "
+                    },
+                    {
+                      "fieldName": "RetainRate",
+                      "displayName": "Retained"
+                    }
+                  ],
+                  "axis": {
+                    "title": "Employee Percentage"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Churn and retain rate by Departments"
+              },
+              "mark": {
+                "colors": [
+                  "#DF3C2B",
+                  "#39DCA8",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "3fb3329a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5c824982",
+                  "fields": [
+                    {
+                      "name": "num_employees",
+                      "expression": "`num_employees`"
+                    },
+                    {
+                      "name": "distance_group",
+                      "expression": "`distance_group`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "num_employees",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "Number of Employees"
+                },
+                "color": {
+                  "fieldName": "distance_group",
+                  "legend": {
+                    "title": "Distance from home"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Churn Rate depending on Distance from home"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "5ab8289a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f0f1acb9",
+                  "fields": [
+                    {
+                      "name": "YearsInCurrentRole_Group",
+                      "expression": "`YearsInCurrentRole_Group`"
+                    },
+                    {
+                      "name": "AttritionRate",
+                      "expression": "`AttritionRate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "YearsInCurrentRole_Group",
+                  "axis": {
+                    "title": "Years In Current Role"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "AttritionRate",
+                  "axis": {
+                    "title": "Attrition Rate"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Education Level and Career Growth"
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 14,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "5c005146",
+            "queries": [
+              {
+                "name": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e35288cf18bc9fd7a87e93956fba_Education",
+                "query": {
+                  "datasetName": "f0f1acb9",
+                  "fields": [
+                    {
+                      "name": "Education",
+                      "expression": "`Education`"
+                    },
+                    {
+                      "name": "Education_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "Education",
+                    "queryName": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e35288cf18bc9fd7a87e93956fba_Education"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 20,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "a5c0773b",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 36px;line-height: 1.5;font-family: Times New Roman;text-decoration: underline;\">Employee Attrition Rate Analysis</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "eca7d480",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "93c4d7c5",
+                  "fields": [
+                    {
+                      "name": "income_group",
+                      "expression": "`income_group`"
+                    },
+                    {
+                      "name": "AttritionRate",
+                      "expression": "`AttritionRate`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`salary_hike_group` IN (`salary_hike_group`) OR TRUE"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "income_group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "AttritionRate",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "73f625ab",
+            "queries": [
+              {
+                "name": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e36535b81b558502fd1d202021f4_salary_hike_group",
+                "query": {
+                  "datasetName": "93c4d7c5",
+                  "fields": [
+                    {
+                      "name": "salary_hike_group",
+                      "expression": "`salary_hike_group`"
+                    },
+                    {
+                      "name": "salary_hike_group_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "salary_hike_group",
+                    "queryName": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e36535b81b558502fd1d202021f4_salary_hike_group"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "f34093a3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c20f6d47",
+                  "fields": [
+                    {
+                      "name": "RateValue",
+                      "expression": "`RateValue`"
+                    },
+                    {
+                      "name": "RateType",
+                      "expression": "`RateType`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "RateValue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "RateType",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "RetainRate",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 3
+                        }
+                      },
+                      {
+                        "value": "ChurnRate",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 4
+                        }
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Retain Rate vs Churn Rate",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "91c1c4c2",
+      "displayName": "Employee_Attrition 1",
+      "layout": [
+        {
+          "widget": {
+            "name": "05a8a4b8",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1fceeb76",
+                  "fields": [
+                    {
+                      "name": "BusinessTravel",
+                      "expression": "`BusinessTravel`"
+                    },
+                    {
+                      "name": "SegmentChurnRate",
+                      "expression": "`SegmentChurnRate`"
+                    },
+                    {
+                      "name": "RetainRate",
+                      "expression": "`RetainRate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "BusinessTravel",
+                  "axis": {
+                    "labelAngle": 0
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "SegmentChurnRate",
+                      "displayName": "Churned"
+                    },
+                    {
+                      "fieldName": "RetainRate",
+                      "displayName": "Retained"
+                    }
+                  ],
+                  "axis": {
+                    "title": "Employee Percentage",
+                    "hideLabels": true
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Churn and Retain Rates corresponding to travel frequency for business",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#D93827",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ],
+                "layout": "percent-stack"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "73c5d219",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b23ebd4a",
+                  "fields": [
+                    {
+                      "name": "Department",
+                      "expression": "`Department`"
+                    },
+                    {
+                      "name": "SegmentChurnRate",
+                      "expression": "`SegmentChurnRate`"
+                    },
+                    {
+                      "name": "RetainRate",
+                      "expression": "`RetainRate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Department",
+                  "axis": {
+                    "labelAngle": 0
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "SegmentChurnRate",
+                      "displayName": "Attrition "
+                    },
+                    {
+                      "fieldName": "RetainRate",
+                      "displayName": "Retained"
+                    }
+                  ],
+                  "axis": {
+                    "title": "Employee Percentage"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Churn and retain rate by Departments"
+              },
+              "mark": {
+                "colors": [
+                  "#DF3C2B",
+                  "#39DCA8",
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "69394133",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5c824982",
+                  "fields": [
+                    {
+                      "name": "num_employees",
+                      "expression": "`num_employees`"
+                    },
+                    {
+                      "name": "distance_group",
+                      "expression": "`distance_group`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "num_employees",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "Number of Employees"
+                },
+                "color": {
+                  "fieldName": "distance_group",
+                  "legend": {
+                    "title": "Distance from home"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Churn Rate depending on Distance from home"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "35f41aec",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f0f1acb9",
+                  "fields": [
+                    {
+                      "name": "YearsInCurrentRole_Group",
+                      "expression": "`YearsInCurrentRole_Group`"
+                    },
+                    {
+                      "name": "AttritionRate",
+                      "expression": "`AttritionRate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "YearsInCurrentRole_Group",
+                  "axis": {
+                    "title": "Years In Current Role"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "AttritionRate",
+                  "axis": {
+                    "title": "Attrition Rate"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Education Level and Career Growth"
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 14,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "9740b217",
+            "queries": [
+              {
+                "name": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e35288cf18bc9fd7a87e93956fba_Education",
+                "query": {
+                  "datasetName": "f0f1acb9",
+                  "fields": [
+                    {
+                      "name": "Education",
+                      "expression": "`Education`"
+                    },
+                    {
+                      "name": "Education_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "Education",
+                    "queryName": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e35288cf18bc9fd7a87e93956fba_Education"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 20,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "b5eb5def",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 36px;line-height: 1.5;font-family: Times New Roman;text-decoration: underline;\">Employee Attrition Rate Analysis</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "0137c769",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "93c4d7c5",
+                  "fields": [
+                    {
+                      "name": "income_group",
+                      "expression": "`income_group`"
+                    },
+                    {
+                      "name": "AttritionRate",
+                      "expression": "`AttritionRate`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`salary_hike_group` IN (`salary_hike_group`) OR TRUE"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "income_group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "AttritionRate",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "99083097",
+            "queries": [
+              {
+                "name": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e36535b81b558502fd1d202021f4_salary_hike_group",
+                "query": {
+                  "datasetName": "93c4d7c5",
+                  "fields": [
+                    {
+                      "name": "salary_hike_group",
+                      "expression": "`salary_hike_group`"
+                    },
+                    {
+                      "name": "salary_hike_group_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "salary_hike_group",
+                    "queryName": "dashboards/01f0e34edc841597bd135766720a2c68/datasets/01f0e36535b81b558502fd1d202021f4_salary_hike_group"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "94fe9a2b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c20f6d47",
+                  "fields": [
+                    {
+                      "name": "RateValue",
+                      "expression": "`RateValue`"
+                    },
+                    {
+                      "name": "RateType",
+                      "expression": "`RateType`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "RateValue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "RateType",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "RetainRate",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 3
+                        }
+                      },
+                      {
+                        "value": "ChurnRate",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 4
+                        }
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Retain Rate vs Churn Rate",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
