@@ -110,3 +110,28 @@ ORDER BY income_group, salary_hike_group;
 2. **Notebook Execution:** Run the provided SQL scripts cell-by-cell to validate dataset profiles and look for zero-variance columns (e.g., verifying `Over18` field consistencies).
 3. **Canvas Generation:** Build a new Databricks Canvas dashboard and bind the queries using the mapped datasets (`1fceeb76`, `b23ebd4a`, etc.) as designated in the layout configurations.
 ---
+
+
+📋 Strategic HR Recommendations
+
+Based on the explicit data patterns discovered during the attrition analysis, HR should implement the following targeted workforce retention strategies:
+
+1. Business Travel Countermeasures
+
+• The Insight: Frequent business travelers experience a massive churn spike of 24.91%.
+• Recommendation: Implement a "Travel Rotation Policy" to cap consecutive months of high-travel assignments. Introduce travel-premium stipends or mandatory remote rest days following long-distance business trips to mitigate burnout.
+
+2. Departmental Interventions (Sales & HR Focus)
+
+• The Insight: Sales leads the company in attrition at 20.63%, with HR following closely at 19.05%.
+• Recommendation: Conduct targeted focus groups and stay-interviews within Sales and HR teams. Audit the Sales incentive structures to ensure commission milestones are realistic, and provide HR staff with psychological health resources to counteract burnout from handling employee issues.
+
+3. Compensation Restructuring for Low-Income Tiers
+
+• The Insight: Employees making under $5,000/month see their highest attrition (27.78%) when receiving top-tier salary hikes (21-25%). This indicates that percentage-based hikes are failing to bridge the gap to a competitive market rate.
+• Recommendation: Shift from strict percentage-based merit cycles to "Market-Equity Adjustments" for lower-income bands. Ensure baseline compensation meets regional market rates rather than leaning on performance percentage multipliers to fix low base pay.
+
+4. Early-Tenure Engagement Programs
+
+• The Insight: Attrition peaks aggressively within the 0–5 year tenure bracket in a current role, regardless of the employee's education level.
+• Recommendation: Revamp the onboarding experience into a structured 12-month career progression path. Set definitive milestone check-ins at months 6, 12, and 18, and offer clear horizontal or vertical pathways to keep early-stage talent engaged.
