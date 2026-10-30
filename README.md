@@ -1,4 +1,4 @@
-#Employee Attrition Rate Analysis#
+# Employee Attrition Rate Analysis
 
 This project analyzes the workforce data from `hr_employee_attrition` using **SQL in Databricks** to determine the core metrics behind employee churn and retention. The objective is to identify key factors influencing employee turnover—such as travel frequency, department structure, distance from home, career longevity, and compensation—to provide actionable insights for HR management.
 
